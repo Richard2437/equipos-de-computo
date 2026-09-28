@@ -1,0 +1,61 @@
+@startuml
+!pragma layout smetana
+skinparam classAttributeIconSize 0
+
+entity "PERSONA" as persona {
+  * **id_persona** : PK
+  --
+  tipo_documento
+  numero_documento
+  nombres
+  apellidos
+  rol
+  correo
+}
+
+entity "EQUIPO" as equipo {
+  * **id_equipo** : PK
+  --
+  serial (UK)
+  marca
+  modelo
+  tipo_propiedad
+  * **id_propietario** : FK
+  codigo_inventario (UK)
+}
+
+entity "ESTADO_EQUIPO" as estado_equipo {
+  * **id_estado** : PK
+  --
+  nombre
+}
+
+entity "REGISTRO_INGRESO" as registro_ingreso {
+  * **id_registro** : PK
+  --
+  * **id_equipo** : FK
+  * **id_persona** : FK
+  fecha_hora_ingreso
+  fecha_hora_salida
+}
+
+entity "PRESTAMO" as prestamo {
+  * **id_prestamo** : PK
+  --
+  * **id_equipo** : FK
+  * **id_persona** : FK
+  fecha_entrega
+  fecha_devolucion_esperada
+  fecha_devolucion_real
+  * **id_estado_entrega** : FK
+  * **id_estado_devolucion** : FK
+}
+
+persona "1" -- "N" equipo : es propietaria de >
+persona "1" -- "N" registro_ingreso : porta >
+persona "1" -- "N" prestamo : solicita >
+equipo "1" -- "N" registro_ingreso : ingresa/sale >
+equipo "1" -- "N" prestamo : se presta en >
+estado_equipo "1" -- "N" prestamo : estado al entregar\ny al devolver >
+
+@enduml
